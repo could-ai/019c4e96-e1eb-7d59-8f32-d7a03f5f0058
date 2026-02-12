@@ -12,8 +12,12 @@ class StockDetailScreen extends StatelessWidget {
     final color = isPositive ? Colors.green : Colors.red;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('${stock.symbol} Details'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -23,6 +27,7 @@ class StockDetailScreen extends StatelessWidget {
             // Header Section
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: Column(
@@ -52,6 +57,7 @@ class StockDetailScreen extends StatelessWidget {
                     ],
                   ),
                 ),
+                const SizedBox(width: 16),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -83,19 +89,25 @@ class StockDetailScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            GridView.count(
-              crossAxisCount: 2,
-              crossAxisSpacing: 16,
-              mainAxisSpacing: 16,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              childAspectRatio: 2.5,
+            // Replaced GridView with Column of Rows to prevent overflow issues on smaller screens
+            Column(
               children: [
-                _buildStatItem(context, 'Market Cap', stock.marketCap),
-                _buildStatItem(context, 'P/E Ratio', stock.peRatio.toString()),
-                _buildStatItem(context, 'Dividend Yield', '${stock.dividendYield}%'),
-                _buildStatItem(context, 'Analyst Rating', stock.analystRating, 
-                  valueColor: _getRatingColor(stock.analystRating)),
+                Row(
+                  children: [
+                    Expanded(child: _buildStatItem(context, 'Market Cap', stock.marketCap)),
+                    const SizedBox(width: 16),
+                    Expanded(child: _buildStatItem(context, 'P/E Ratio', stock.peRatio.toString())),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(child: _buildStatItem(context, 'Dividend Yield', '${stock.dividendYield}%')),
+                    const SizedBox(width: 16),
+                    Expanded(child: _buildStatItem(context, 'Analyst Rating', stock.analystRating, 
+                      valueColor: _getRatingColor(stock.analystRating))),
+                  ],
+                ),
               ],
             ),
             
